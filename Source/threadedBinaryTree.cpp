@@ -128,7 +128,7 @@ public:
         if(node->left == NULL && node->right == NULL){
             int index = getIndex(node);
             if(index+1 < current){
-                node->right = inorder[index+1];
+                node->right = inorder[index+1];`
                 inorder[index+1]->self = true;
             }
             else

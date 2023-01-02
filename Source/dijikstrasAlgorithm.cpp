@@ -50,7 +50,7 @@ class Dijkstras{
 
 public:
 
-    int getNextVertex(bool visited[], int cost[size]){
+    int getNextVertex(bool visited[], int cost[]){
         int min = INT_MAX, nextVertex;
         for(int i = 0; i < size; i++){
             if(!visited[i]){

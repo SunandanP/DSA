@@ -86,10 +86,7 @@ public:
     }
 
     bool isEmpty(){
-        if (top == NULL){
-            return false;
-        }
-        return true;
+        return (top == NULL);
     }
 
     char getTop(){
@@ -221,20 +218,25 @@ string infixPostfix(string s){
     for (int i = 0; i < s.length(); i++) {
         if (isalpha(s[i])){
             result += s[i];
-        } else if (s[i] == '('){
+        }
+
+        else if (s[i] == '('){
             stack.push(s[i]);
         }
+
         else if(s[i] == ')'){
             while (stack.getTop() != '(') {
                 result += stack.pop();
             }
+            stack.pop();
+        }
 
-            if (!stack.isEmpty()){
-                stack.pop();
-            }
+        else if (stack.isEmpty() || prec(s[i]) > prec(stack.getTop())) {
+            stack.push(s[i]);
+        }
 
-        } else{
-            if ((!stack.isEmpty()) && prec(stack.getTop()) > prec(s[i])){
+        else{
+            if ((!stack.isEmpty()) && prec(stack.getTop()) >= prec(s[i])){
                 result += stack.pop();
             }
             stack.push(s[i]);

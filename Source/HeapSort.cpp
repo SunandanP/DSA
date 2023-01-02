@@ -1,123 +1,89 @@
 #include <iostream>
-#include <math.h>
 using namespace std;
 
 class Heap{
-    static const int size = 11;
-    int heap[size], current = 0;
-
-    int getChildL(int parent){
-        return ((parent * 2) + 1);
-    }
-
-    int getChildR(int parent) {
-        return ((parent * 2) + 2);
-    }
-
-    int getParent(int child){
-        return (child-1)/2;
-    }
+    int heap[100];
+    int size = 0;
 
 public:
-    Heap(){
-        for(int i = 0; i < size; i++){
-            heap[i] = -1;
+    void insert(int data){
+        int index = ++size;
+        heap[size] = data;
+
+        while(index > 1){
+            int parent = index/2;
+            if(heap[parent] < heap[index]){
+                swap(heap[parent], heap[index]);
+            }
+            index = parent;
         }
     }
 
     void display(){
-        for(int i = 0; i < size; i++) {
-            cout<<heap[i]<< " ";
+        for(int i = 1; i <= size; i++){
+            cout<<heap[i]<<" ";
         }
         cout<<endl;
     }
 
-    void insert(int data){
-        if(current < size){
-            heap[current++] = data;
-            bubbleUp();
-        }
-        else{
-            cout<<"Heap is full!";
-        }
+    int deleteNode(){
+        int temp = heap[1];
+        heap[1] = heap[size];
+        size--;
 
-    }
-
-    int remove(){
-        int temp = -1, index = 0;
-        if(current >= 0){
+        int index = 1;
+        while(index * 2 + 1 <= size){
+            int largerChild = (heap[index * 2] > heap[index * 2 + 1])? index * 2 : index * 2 + 1;
+            if(heap[index] < heap[largerChild]){
+                swap(heap[index], heap[largerChild]);
+                index = largerChild;
+            }
 
         }
-        else{
-            cout<<"Heap is empty!";
-        }
-
         return temp;
     }
 
+    void heapify(int arr[], int size, int index){
+        int largest = index;
+        int left = index * 2;
+        int right = index * 2 + 1;
 
+        if(left < size && arr[left] < arr[largest])
+            largest = left;
+        if(right < size && arr[right] < arr[largest])
+            largest = right;
 
-    void bubbleDown(){
-        int index = 0, child1, child2;
-
-        while(index <= size-1){}
-
-    }
-
-    void swap(int first, int second){
-        int temp = heap[first];
-        heap[first] = heap[second];
-        heap[second] = temp;
-    }
-
-    void bubbleUp(){
-        int index = current - 1;
-        while(index > 0 && heap[index] > heap[getParent(index)]){
-            swap(index, getParent(index));
-            index = getParent(index);
-        }
-    }
-
-    void runApp(){
-        int input = -1;
-        int temp;
-        while(input != 0){
-            cout<<"1. Insert"<<endl;
-            cout<<"2. display"<<endl;
-            cout<<"3. Heap Sort"<<endl;
-            cin>>input;
-            switch(input){
-                case 1:
-                    cout<<"Enter the number to be inserted :";
-                    cin>>temp;
-                    insert(temp);
-                    break;
-                case 2:
-                    display();
-                    break;
-                case 3:
-                    heapSort();
-                    break;
-            }
+        if(largest != index){
+            swap(arr[largest], arr[index]);
+            heapify(arr, size, largest);
         }
     }
 
     void heapSort(){
-        int temp;
-        for(int i = 0; i <= current; i++){
-            temp = remove();
-            if(temp != -1)
-                cout<<temp<<" ";
-        }
+        int size = this->size;
 
-        cout<<endl;
-        current = 0;
+
     }
 
+    void sort(){
+        int last = size, temp[size+1];
+        for(int i = 1; i <= last; i++){
+            temp[i] = deleteNode();
+        }
+        for(int i = 1; i <= last; i++)
+            insert(temp[i]);
+    }
 };
 
 
 int main(){
     Heap heap;
-    heap.runApp();
+    heap.insert(50);
+    heap.insert(51);
+    heap.insert(52);
+    heap.insert(55);
+    heap.insert(70);
+    heap.display();
+    heap.sort();
+    heap.display();
 }
